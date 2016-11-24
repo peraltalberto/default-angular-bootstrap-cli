@@ -14,7 +14,7 @@ import { HttpToolsService } from '../shared/http-tools.service'
 
 @Injectable()
 export class SeguridadService {
-  urlBase: string = 'http://localhost:3030/api';
+  urlBase: string = 'http://api.dime-que.es';
 
   constructor(
     private http: Http, 
@@ -49,9 +49,9 @@ export class SeguridadService {
     // parte de nuestra labor será guardarla para futuros usos
     let body = JSON.stringify(credenciales)
     console.log(body);
-    let options = this.httpToolsService.configurarCabeceras()
+   // let options = this.httpToolsService.configurarCabeceras()
     return this.http
-        .post(ruta, body, options)
+        .get(ruta)
         .map(this.httpToolsService.obtenerDatos)
         .map(this.httpToolsService.guardarCredenciales)
         .catch(this.httpToolsService.tratarErrores)
