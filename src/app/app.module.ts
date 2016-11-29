@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
+
 // importación del componente raíz, definido en esta misma carpeta
 import { AppComponent } from './app.component';
 // importación de un módulo de funcionalidad
@@ -13,24 +14,35 @@ import { ContactoModule } from './contacto/contacto.module';
 import { ContactoComponent } from './contacto/contacto.component';
 import { HomeComponent } from './home/home.component';
 import { SaludoComponent } from './saludo/saludo.component';
-import { HttpToolsService } from './shared/http-tools.service';
 import { SeguridadComponent } from './seguridad/seguridad.component';
+import { PortalComponent } from './portal/portal.component'
+
+//servicios
+import { HttpToolsService } from './shared/http-tools.service';
+import { UtilService } from './shared/util.service';
 import { SeguridadService } from './seguridad/seguridad.service';
+import { StorageService } from './shared/storage.service';
+
 // material design
 import { MaterialModule } from '@angular/material';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+//importacion de rutas
+import { SeguridadRoutes } from './seguridad/seguridad.routes';
+
 
 // definir las rutas
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'inicio', redirectTo: '' },
-  { path: 'contacto', component: ContactoComponent },
-  { path: 'movimientos', component: MovimientosComponent },
-  { path: 'seguridad', component: SeguridadComponent },
-  { path: 'saludo', component: SaludoComponent },
-  { path: 'saludo/:amigo', component: SaludoComponent },
+  ...SeguridadRoutes,
   {
+    path: 'home',
+    component: PortalComponent,
+    children: [
+      { path: '', component: HomeComponent },
+    ]
+  },{
     path: '**',
-    redirectTo: '',
+    redirectTo: 'home',
     pathMatch: 'full'
   }
 ];
@@ -41,7 +53,8 @@ const routes: Routes = [
     AppComponent,
     HomeComponent,
     SaludoComponent,
-    SeguridadComponent
+    SeguridadComponent,
+    PortalComponent
   ], // cosas declaradas en este módulo
   imports: [
     BrowserModule,
@@ -50,11 +63,14 @@ const routes: Routes = [
     MovimientosModule, // el módulo de movimientos,
     ContactoModule,
     RouterModule.forRoot(routes),
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    NgbModule.forRoot()
   ], // otros módulos que necesitamos para que este funcione
   providers: [
     HttpToolsService,
-    SeguridadService
+    SeguridadService,
+    UtilService,
+    StorageService,
   ],  // inyección de servicios comunes para la aplicación
   bootstrap: [AppComponent] // componente raíz para el arranque
 })

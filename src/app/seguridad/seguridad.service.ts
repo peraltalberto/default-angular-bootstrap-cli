@@ -11,15 +11,19 @@ import 'rxjs/add/operator/catch'
  * Importación del servicicio de utilidad
  */
 import { HttpToolsService } from '../shared/http-tools.service'
+import { UtilService } from '../shared/util.service'
+
 
 @Injectable()
 export class SeguridadService {
   urlBase: string = 'http://api.dime-que.es';
-
   constructor(
     private http: Http, 
     private httpToolsService: HttpToolsService
+    
+
 ) {
+  
   }
 
   registrar(credenciales) {
@@ -39,22 +43,37 @@ export class SeguridadService {
   }
 
   entrar(credenciales) {
-    let ruta = `${this.urlBase}/pub/sesiones`;
+    let ruta = `${this.urlBase}/prv/sesiones`;
     return this.comunicar(credenciales, ruta);
   }
 
+ inSession() {
+    let ruta = `${this.urlBase}/prv/in-session`;
+    let options = this.httpToolsService.configurarCabeceras()
+    return this.http
+        .get(ruta,options)
+        .map(this.httpToolsService.obtenerDatos)
+        .catch(this.httpToolsService.tratarErrores)
+ 
+  }
+  enSession(){
+    UtilService.goto(['home', '']);
+  }
 
   comunicar(credenciales, ruta) {
     // la llamada de seguridad debería devolvernos credenciales
     // parte de nuestra labor será guardarla para futuros usos
     let body = JSON.stringify(credenciales)
     console.log(body);
-   // let options = this.httpToolsService.configurarCabeceras()
+    let options = this.httpToolsService.configurarCabeceras()
     return this.http
-        .get(ruta)
-        .map(this.httpToolsService.obtenerDatos)
+        .post(ruta,body,options)
+        .map(HttpToolsService._decode64Url)
+        .map(HttpToolsService._jsonEncode)
         .map(this.httpToolsService.guardarCredenciales)
         .catch(this.httpToolsService.tratarErrores)
   }
+
+  
 }
 
