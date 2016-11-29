@@ -32,9 +32,16 @@ export class StorageService {
 
 
   getToken() : string{
-    return UtilService.decode64(this.getBrowser(StorageService.TOKEN));
+
+    var tk = this.getBrowser(StorageService.TOKEN);
+    //console.log(tk);
+    var valor = tk=== null ?'':UtilService.decode64(tk);
+    return valor;
   }
    setToken(value){
+     console.log(value);
+     console.log(UtilService.encode64(value));
+     
      this.setBrowser(StorageService.TOKEN,UtilService.encode64(value));
   }
 

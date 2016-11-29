@@ -70,7 +70,7 @@ const routes: Routes = [
     HttpToolsService,
     SeguridadService,
     UtilService,
-    StorageService,
+    StorageService
   ],  // inyección de servicios comunes para la aplicación
   bootstrap: [AppComponent] // componente raíz para el arranque
 })

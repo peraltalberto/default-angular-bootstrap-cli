@@ -12,7 +12,7 @@ export class SeguridadComponent implements OnInit {
     usuario = {};//:any = { email:'', password:''}
     mensaje = "";
     recuerda: boolean;
-    constructor(private seguridadService: SeguridadService) {
+    constructor(private seguridadService: SeguridadService, private storageService:StorageService) {
         this.recurdaLogin();
     }
 
@@ -43,12 +43,13 @@ export class SeguridadComponent implements OnInit {
             .registrar(this.usuario)
             .subscribe(
             r => {
-                console.log(this.recuerda);
+                console.log(r);
                 if (this.recuerda) {
                     localStorage.setItem("gim-web-ga", btoa(JSON.stringify(this.usuario)));
                 } else {
                     localStorage.removeItem("gim-web-ga");
                 }
+                //this.storageService.setToken(r.token);
                 this.seguridadService.enSession();
             },
             e => {

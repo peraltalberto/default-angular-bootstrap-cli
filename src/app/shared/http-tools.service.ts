@@ -12,14 +12,14 @@ import 'rxjs/add/observable/throw'
 @Injectable()
 export class HttpToolsService {
 
-
-  private static _token: String = '';
-
-  constructor(private utilService: UtilService, private storageService: StorageService) {
+constructor(private utilService: UtilService, public storageService: StorageService) {
    
-    HttpToolsService._token = atob(storageService.getToken());
-    
+    HttpToolsService._storage = storageService;
+    HttpToolsService._token = this.storageService.getToken();
+   
   }
+  private static _storage: StorageService;
+  private static _token: String = '';
   // puesto que los envíos requieren siempre la misma configuración
   configurarCabeceras() {
     let headers = new Headers({
@@ -31,7 +31,10 @@ export class HttpToolsService {
   }
 
   public static _jsonEncode(str){
-    return JSON.parse(str);
+    var result = JSON.parse(str);
+    console.log(result);
+    
+    return result;
   }
   // para extraer los datos json de la respuesta http 
   obtenerDatos(response) {
@@ -47,7 +50,7 @@ export class HttpToolsService {
     if (error.status == 401) {
       //console.log("Error de permisos");
       UtilService.goto('seguridad');
-      this.storageService.removeBrowser(StorageService.TOKEN);
+      HttpToolsService._storage.removeBrowser(StorageService.TOKEN);
 
     }
     else {
@@ -58,10 +61,15 @@ export class HttpToolsService {
 
   // despues de obtener credenciales  
   guardarCredenciales(session) {
+    console.log(session);
+    
     // guardar credenciales
     //console.log('Guardando token: ' + session.token);
-    this.storageService.setToken(session.token);
+    
+    
     HttpToolsService._token = session.token;
+    
+    HttpToolsService._storage.setToken(session.token);
     //localStorage.setItem("gim-web-user",btoa(JSON.stringify(session.user)));
     //HttpToolsService._token = token.token
     // ir a la página principal
@@ -72,8 +80,7 @@ export class HttpToolsService {
   public static _decode64Url(response) {
     console.log(response);
     console.log(response._body);
-    
-    let m =atob(response._body);
+    let m =UtilService.decode64(response._body);
     console.log(m);
     return m;
   }
@@ -82,7 +89,7 @@ export class HttpToolsService {
 
 
   public static _borrarToken() {
-    sessionStorage.removeItem(StorageService.TOKEN);
+    HttpToolsService._storage.removeBrowser(StorageService.TOKEN);
     HttpToolsService._token = '';
     
   }
