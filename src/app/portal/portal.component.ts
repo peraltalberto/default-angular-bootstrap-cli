@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 
-import {HttpToolsService} from '../shared'
 
 
 @Component({
@@ -11,18 +9,13 @@ import {HttpToolsService} from '../shared'
 })
 export class PortalComponent implements OnInit {
 
-  constructor(private httpToolsService :HttpToolsService) { }
+  constructor() { }
 
   ngOnInit() {
 
   }
   
-  cerrarSession(){
-      HttpToolsService._borrarToken();
-     //console.log(this.isActivo());
-      
-  }
-  isActivo(){
-    return HttpToolsService._activo()
-  }
+
+
+   public isCollapsed = false;
 }

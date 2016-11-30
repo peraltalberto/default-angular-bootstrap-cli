@@ -1,6 +1,7 @@
 import { SeguridadService } from './seguridad.service';
 import { Component, OnInit } from '@angular/core';
-import { UtilService , StorageService} from '../shared';
+import { UtilService , StorageService,User,Login} from '../shared';
+
 
 @Component({
     selector: 'app-seguridad',
@@ -9,7 +10,7 @@ import { UtilService , StorageService} from '../shared';
 })
 export class SeguridadComponent implements OnInit {
 
-    usuario = {};//:any = { email:'', password:''}
+    usuario:Login = new Login();//:any = { email:'', password:''}
     mensaje = "";
     recuerda: boolean;
     constructor(private seguridadService: SeguridadService, private storageService:StorageService) {
@@ -23,18 +24,19 @@ export class SeguridadComponent implements OnInit {
         this.recuerda = true;
         if (localStorage.getItem(StorageService.RECORDAR_LOGIN) == 'true') {
             this.recuerda = true;
-            if (localStorage.getItem("gim-web-ga") === null) {
-                this.usuario = {};
-            } else {
-                this.usuario =JSON.parse(atob(localStorage.getItem("gim-web-ga")));
-            }
+
+             this.usuario =this.storageService.getLogin();
+            if (this.usuario === null) {
+                this.usuario =new Login();
+            } 
+
         } else {
             this.recuerda = false;
         }
     }
     toolgerRecuerda() {
         this.recuerda = !this.recuerda;
-        localStorage.setItem("gim-web-recuerda", "" + this.recuerda);
+       this.storageService.setBrowser(StorageService.RECORDAR_LOGIN, "" + this.recuerda);
     }
 
     entrarUsuario() {
@@ -45,9 +47,9 @@ export class SeguridadComponent implements OnInit {
             r => {
                 console.log(r);
                 if (this.recuerda) {
-                    localStorage.setItem("gim-web-ga", btoa(JSON.stringify(this.usuario)));
+                     this.storageService.setLogin(this.usuario);
                 } else {
-                    localStorage.removeItem("gim-web-ga");
+                    this.storageService.removeBrowser(StorageService.LOGIN);
                 }
                 //this.storageService.setToken(r.token);
                 this.seguridadService.enSession();

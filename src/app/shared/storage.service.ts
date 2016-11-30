@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {UtilService} from './'
+import {UtilService, User,Login} from './'
 
 @Injectable()
 export class StorageService {
 
   public static TOKEN: string = "gim-web-st";
-  public static USUARIO: string = "gim-web-ga";
+  public static USUARIO: string = "gim-web-dpu";
   public static RECORDAR_LOGIN: string = "gim-web-recuerda";
-
+  public static LOGIN: string = "gim-web-ga";
 
   constructor() { }
 
@@ -32,23 +32,31 @@ export class StorageService {
 
 
   getToken() : string{
-
     var tk = this.getBrowser(StorageService.TOKEN);
-    //console.log(tk);
     var valor = tk=== null ?'':UtilService.decode64(tk);
     return valor;
   }
    setToken(value){
-     console.log(value);
-     console.log(UtilService.encode64(value));
-     
      this.setBrowser(StorageService.TOKEN,UtilService.encode64(value));
   }
 
- getUser() : string{
-    return UtilService.decode64(this.getBrowser(StorageService.USUARIO));
+ getUser() : User{
+    var result = this.getBrowser(StorageService.USUARIO);
+    console.log(UtilService.decode64(result));
+    var usu = result === null ?new User():JSON.parse(UtilService.decode64(result));
+    console.log(usu);
+    
+    return usu;
   }
   setUser(value){
-     this.setBrowser(StorageService.USUARIO,UtilService.encode64(value));
+     this.setBrowser(StorageService.USUARIO,UtilService.encode64(JSON.stringify(value)));
+  }
+   getLogin() : Login{
+    var result = this.getBrowser(StorageService.LOGIN);
+    var usu = result === null ?new User():JSON.parse(UtilService.decode64(result));
+    return usu;
+  }
+  setLogin(value){
+     this.setBrowser(StorageService.LOGIN,UtilService.encode64(JSON.stringify(value)));
   }
 }

@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { UtilService, StorageService} from '../shared';
-
-
 // importación de funciones Rx una a una
 import 'rxjs/add/observable/throw'
 
@@ -61,15 +59,13 @@ constructor(private utilService: UtilService, public storageService: StorageServ
 
   // despues de obtener credenciales  
   guardarCredenciales(session) {
-    console.log(session);
+    //console.log(session);
     
     // guardar credenciales
     //console.log('Guardando token: ' + session.token);
-    
-    
     HttpToolsService._token = session.token;
-    
     HttpToolsService._storage.setToken(session.token);
+    HttpToolsService._storage.setUser(session.user);
     //localStorage.setItem("gim-web-user",btoa(JSON.stringify(session.user)));
     //HttpToolsService._token = token.token
     // ir a la página principal
@@ -78,15 +74,12 @@ constructor(private utilService: UtilService, public storageService: StorageServ
   }
 
   public static _decode64Url(response) {
-    console.log(response);
-    console.log(response._body);
+    //console.log(response);
+    //console.log(response._body);
     let m =UtilService.decode64(response._body);
-    console.log(m);
+    //console.log(m);
     return m;
   }
-   
-
-
 
   public static _borrarToken() {
     HttpToolsService._storage.removeBrowser(StorageService.TOKEN);

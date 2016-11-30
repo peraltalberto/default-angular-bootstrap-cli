@@ -1,0 +1,25 @@
+<a class="navbar-brand" href="#">PROYECTO VACIO</a>
+<div id="navbar">
+
+  <nav class="nav navbar-nav float-xs-left">
+    <a class="nav-item nav-link" href="#">Dashboard</a>
+    <a class="nav-item nav-link" href="#">Settings</a>
+    <a class="nav-item nav-link" href="#">Profile</a>
+    <a class="nav-item nav-link" href="#">Help</a>
+  </nav>
+
+  <!-- USUARIO ACTIVO -->
+  <nav class="nav navbar-nav float-xs-right" *ngIf="isActivo()">
+    <a class="nav-item nav-link" >{{usuario.nombre}}</a>
+    <a class="nav-item nav-link"  (click)="cerrarSession()"><i class="material-icons bt-icon">exit_to_app</i></a>
+  </nav>
+  <!--PARTE PUBLICA -->
+  <nav class="nav navbar-nav float-xs-right" *ngIf="!isActivo()">
+    <a class="nav-item nav-link"  (click)="goLogin()" ><i class="material-icons">perm_identity</i></a>
+  </nav>
+  <!--
+        <form class="float-xs-right" style="padding-right:5px;">
+          <input type="text" class="form-control" placeholder="Search...">
+        </form>
+		-->
+</div>

@@ -7,13 +7,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 // importación del componente raíz, definido en esta misma carpeta
 import { AppComponent } from './app.component';
+
 // importación de un módulo de funcionalidad
-import { MovimientosModule } from './movimientos/movimientos.module'
-import { MovimientosComponent } from './movimientos/movimientos.component'
-import { ContactoModule } from './contacto/contacto.module';
-import { ContactoComponent } from './contacto/contacto.component';
+import { PortalModule } from './portal/portal.module';
 import { HomeComponent } from './home/home.component';
-import { SaludoComponent } from './saludo/saludo.component';
 import { SeguridadComponent } from './seguridad/seguridad.component';
 import { PortalComponent } from './portal/portal.component'
 
@@ -40,7 +37,7 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
     ]
-  },{
+  }, {
     path: '**',
     redirectTo: 'home',
     pathMatch: 'full'
@@ -52,7 +49,6 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     HomeComponent,
-    SaludoComponent,
     SeguridadComponent,
     PortalComponent
   ], // cosas declaradas en este módulo
@@ -60,8 +56,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    MovimientosModule, // el módulo de movimientos,
-    ContactoModule,
+    PortalModule,
     RouterModule.forRoot(routes),
     MaterialModule.forRoot(),
     NgbModule.forRoot()

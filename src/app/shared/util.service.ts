@@ -17,7 +17,7 @@ export class UtilService {
   }
   public static decode64(response) {
     let m = atob(response);
-    console.log(m);
+    //console.log(m);
     return m;
   }
 
